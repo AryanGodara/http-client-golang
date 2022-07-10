@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/xml"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -55,5 +56,10 @@ func createUser(user User) {
 }
 
 func main() {
-	getUrls()
+	// getUrls()
+
+	v := &User{FirstName: "John", LastName: "Doe"}
+	xmlbody, _ := xml.Marshal(v)
+
+	fmt.Println(xmlbody)
 }
