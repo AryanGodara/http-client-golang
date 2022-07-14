@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/xml"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -15,6 +14,13 @@ var (
 
 func getGitHubClient() gohttp.HttpClient {
 	client := gohttp.New()
+
+	client.DisableTimeouts(true)
+
+	// timeouts configuration
+	// client.SetConnectionTimeout(2 * time.Second)
+	// client.SetResponseTimeout(50 * time.Millisecond)
+	// client.SetMaxIdleConnections(5)
 
 	// Creates a map[string][]string (key:string, val: slice of string)
 	commonHeaders := make(http.Header)
@@ -56,10 +62,10 @@ func createUser(user User) {
 }
 
 func main() {
-	// getUrls()
+	getUrls()
 
-	v := &User{FirstName: "John", LastName: "Doe"}
-	xmlbody, _ := xml.Marshal(v)
+	// v := &User{FirstName: "John", LastName: "Doe"}
+	// xmlbody, _ := xml.Marshal(v)
 
-	fmt.Println(xmlbody)
+	// fmt.Println(string(xmlbody))
 }

@@ -5,8 +5,62 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"errors"
+	"net"
 	"net/http"
+	"time"
 )
+
+const (
+	defaultMaxIdleTimeout    = 5
+	defaultConnectionTimeout = 1 * time.Second
+	defaultResponseTimeout   = 5 * time.Second
+)
+
+func (c *httpClient) getHttpClient() *http.Client {
+	if c.client != nil {
+		return c.client
+	}
+
+	c.client = &http.Client{
+		Timeout: c.getConnectionTimeout() + c.getResponseTimeout(),
+		Transport: &http.Transport{
+			MaxIdleConnsPerHost:   c.getMaxIdleConnections(),
+			ResponseHeaderTimeout: c.getResponseTimeout(),
+			DialContext: net.Dialer{
+				Timeout: c.getConnectionTimeout(),
+			}.Resolver.Dial,
+		},
+	}
+
+	return c.client
+}
+
+func (c *httpClient) getMaxIdleConnections() int {
+	if c.maxIdleConnections > 0 {
+		return c.maxIdleConnections
+	} else {
+		return defaultMaxIdleTimeout
+	}
+}
+func (c *httpClient) getResponseTimeout() time.Duration {
+	if c.responseTimeout > 0 {
+		return c.getResponseTimeout()
+	} else if c.disableTimeouts {
+		return 0
+	} else {
+		return defaultResponseTimeout
+	}
+
+}
+func (c *httpClient) getConnectionTimeout() time.Duration {
+	if c.connectionTimeout > 0 {
+		return c.connectionTimeout
+	} else if c.disableTimeouts {
+		return 0
+	} else {
+		return defaultConnectionTimeout
+	}
+}
 
 func (c *httpClient) getRequestBody(contentType string, body interface{}) ([]byte, error) {
 	if body == nil {
@@ -25,7 +79,6 @@ func (c *httpClient) getRequestBody(contentType string, body interface{}) ([]byt
 
 }
 
-// Takes the default headers (fiedl of struct 'httpClient'), and custom headers (as parameters), and combines them
 func (c *httpClient) getRequestHeaders(requestHeaders http.Header) http.Header {
 	result := make(http.Header)
 
@@ -47,7 +100,7 @@ func (c *httpClient) getRequestHeaders(requestHeaders http.Header) http.Header {
 }
 
 func (c *httpClient) do(method string, url string, headers http.Header, body interface{}) (*http.Response, error) {
-	client := http.Client{}
+	// client := http.Client{}
 
 	fullHeaders := c.getRequestHeaders(headers)
 	requestBody, err := c.getRequestBody(fullHeaders.Get("Content-Type"), body)
@@ -56,13 +109,15 @@ func (c *httpClient) do(method string, url string, headers http.Header, body int
 	}
 
 	// create a new http request
-	request, err := http.NewRequest(http.MethodGet, url, bytes.NewBuffer(requestBody))
+	request, err := http.NewRequest(method, url, bytes.NewBuffer(requestBody))
 	if err != nil {
 		return nil, errors.New("unable to create a new request")
 	}
 
 	request.Header = fullHeaders
 
-	return client.Do(request)
+	// return c.client.Do(request)	//? This'll fail, if we run this before creating a client
 
+	client := c.getHttpClient()
+	return client.Do(request)
 }
