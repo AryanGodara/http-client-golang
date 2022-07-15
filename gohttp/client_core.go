@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"errors"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"time"
@@ -98,7 +99,7 @@ func (c *httpClient) getRequestHeaders(requestHeaders http.Header) http.Header {
 	return result
 }
 
-func (c *httpClient) do(method string, url string, headers http.Header, body interface{}) (*http.Response, error) {
+func (c *httpClient) do(method string, url string, headers http.Header, body interface{}) (*Response, error) {
 	// client := http.Client{}
 
 	fullHeaders := c.getRequestHeaders(headers)
@@ -118,5 +119,25 @@ func (c *httpClient) do(method string, url string, headers http.Header, body int
 	// return c.client.Do(request)	//? This'll fail, if we run this before creating a client
 
 	client := c.getHttpClient()
-	return client.Do(request)
+
+	response, err := client.Do(request)
+	if err != nil {
+		return nil, err
+	}
+
+	responseBody, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	defer response.Body.Close() // So the user of this package doesn't have to do this :)
+
+	finalResponse := Response{
+		status:     response.Status,
+		statusCode: response.StatusCode,
+		headers:    response.Header,
+		body:       responseBody,
+	}
+
+	return &finalResponse, nil
 }
