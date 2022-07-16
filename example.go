@@ -29,8 +29,11 @@ type User struct {
 
 func main() {
 	getUrls()
-	getUrls()
-	getUrls()
+
+	// v := &User{FirstName: "John", LastName: "Doe"}
+	// xmlbody, _ := xml.Marshal(v)
+
+	// fmt.Println(string(xmlbody))
 }
 
 func getUrls() {
