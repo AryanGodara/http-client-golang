@@ -7,7 +7,9 @@ import (
 
 var (
 	mockupServer = mockServer{
-		mocks: make(map[string]*Mock),
+		mocks:       make(map[string]*Mock),
+		enabled:     false,
+		serverMutex: sync.Mutex{},
 	}
 )
 
@@ -30,6 +32,13 @@ func StopMockServer() {
 	defer mockupServer.serverMutex.Unlock()
 
 	mockupServer.enabled = false
+}
+
+func FlushMocks() {
+	mockupServer.serverMutex.Lock()
+	defer mockupServer.serverMutex.Unlock()
+
+	mockupServer.mocks = make(map[string]*Mock) // Remove prev map, create a fresh one
 }
 
 func AddMock(mock Mock) {
