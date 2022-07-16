@@ -40,3 +40,7 @@ func AddMock(mock Mock) {
 func (m *mockServer) getMockKey(method, url, body string) string {
 	return method + url + body
 }
+
+func (m *mockServer) getMock(method, url, body string) *Mock {
+	return m.mocks[m.getMockKey(method, url, body)]
+}

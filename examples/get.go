@@ -9,9 +9,9 @@ import "fmt"
 */
 
 type Endpoints struct {
-	CurrentUser       string `'json:"current_user_url"`
-	AuthorizationsUrl string `'json:"authorizations_url"`
-	RepositoryUrl     string `'json:"repository_url"`
+	CurrentUser       string `json:"current_user_url"`
+	AuthorizationsUrl string `json:"authorizations_url"`
+	RepositoryUrl     string `json:"repository_url"`
 }
 
 func GetEndpoints() (*Endpoints, error) {
@@ -20,16 +20,16 @@ func GetEndpoints() (*Endpoints, error) {
 		return nil, err
 	}
 
-	fmt.Println(response.Status())
-	fmt.Println(response.StatusCode())
-	fmt.Println(response.StringBody())
+	fmt.Println("1.", response.Status())
+	fmt.Println("2.", response.StatusCode())
+	fmt.Println("3.", response.StringBody())
 
 	var endpoints Endpoints
 	if err := response.UnmarshalJson(&endpoints); err != nil {
 		return nil, err
 	}
 
-	fmt.Printf("Repositories URL: %s\n", endpoints.RepositoryUrl)
+	fmt.Println("Current User: ", endpoints.CurrentUser)
 
 	return &endpoints, nil
 }

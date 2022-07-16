@@ -108,6 +108,11 @@ func (c *httpClient) do(method string, url string, headers http.Header, body int
 		panic(err)
 	}
 
+	// we already have a mock matching this particular request type
+	if mock := mockupServer.getMock(method, url, string(requestBody)); mock != nil {
+		return mock.GetResponse()
+	}
+
 	// create a new http request
 	request, err := http.NewRequest(method, url, bytes.NewBuffer(requestBody))
 	if err != nil {

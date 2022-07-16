@@ -2,7 +2,9 @@ package examples
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
+	"strings"
 	"testing"
 
 	"github.com/AryanGodara/http-client-golang/gohttp"
@@ -11,8 +13,6 @@ import (
 func TestGetEndpoint(t *testing.T) {
 	// Tell the HTTP library to mock any further requests from here
 	gohttp.StartMockServer()
-
-	GetEndpoints()
 
 	t.Run("TestErrorFetchingFromGithub", func(t *testing.T) {
 		// Initialization:
@@ -39,6 +39,8 @@ func TestGetEndpoint(t *testing.T) {
 		}
 	})
 
+	gohttp.StopMockServer()
+
 	t.Run("TestErrorUnmarshalResponseBody", func(t *testing.T) {
 		// Initialization:
 		gohttp.AddMock(gohttp.Mock{
@@ -60,7 +62,7 @@ func TestGetEndpoint(t *testing.T) {
 			t.Error("an error was expected")
 		}
 
-		if err.Error() != "json unmarshal error" {
+		if err != nil && !strings.Contains(err.Error(), "cannot unmarshal number into Go struct field") {
 			t.Error("invalid error message received")
 		}
 	})
@@ -85,7 +87,8 @@ func TestGetEndpoint(t *testing.T) {
 			t.Error("endpoints were expected, but we got nil")
 		}
 
-		if endpoints != nil && endpoints.RepositoryUrl != "https://api.github.com/user" {
+		if endpoints != nil && endpoints.CurrentUser != "https://api.github.com/user" {
+			fmt.Println("CUrrnetUSER: ", endpoints.CurrentUser)
 			t.Error("invalid current user url")
 		}
 
