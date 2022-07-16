@@ -4,15 +4,24 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"testing"
 
 	"github.com/AryanGodara/http-client-golang/gohttp"
 )
 
+func TestMain(m *testing.M) {
+	fmt.Println("About to start test cases for package 'examples'")
+
+	gohttp.StartMockServer()
+	defer gohttp.StopMockServer()
+
+	os.Exit(m.Run())
+}
+
 func TestGetEndpoint(t *testing.T) {
 	// Tell the HTTP library to mock any further requests from here
-	gohttp.StartMockServer()
 
 	t.Run("TestErrorFetchingFromGithub", func(t *testing.T) {
 		// Initialization:
@@ -38,8 +47,6 @@ func TestGetEndpoint(t *testing.T) {
 			t.Error("invalid error message received")
 		}
 	})
-
-	gohttp.StopMockServer()
 
 	t.Run("TestErrorUnmarshalResponseBody", func(t *testing.T) {
 		// Initialization:

@@ -20,9 +20,9 @@ func GetEndpoints() (*Endpoints, error) {
 		return nil, err
 	}
 
-	fmt.Println("1.", response.Status())
-	fmt.Println("2.", response.StatusCode())
-	fmt.Println("3.", response.StringBody())
+	fmt.Println("1. Status: ", response.Status())
+	fmt.Println("2. StatusCode: ", response.StatusCode())
+	fmt.Println("3. ResponseBody: ", response.StringBody())
 
 	var endpoints Endpoints
 	if err := response.UnmarshalJson(&endpoints); err != nil {
