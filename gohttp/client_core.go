@@ -20,6 +20,12 @@ const (
 func (c *httpClient) getHttpClient() *http.Client {
 
 	c.clientOnce.Do(func() { // func() is executed only once, even in concurrent enviornments
+
+		if c.builder.client != nil { // someone defined a custom http.Client already, so we need to use that
+			c.client = c.builder.client
+			return
+		}
+
 		c.client = &http.Client{
 			Timeout: c.getConnectionTimeout() + c.getResponseTimeout(),
 			Transport: &http.Transport{
@@ -77,26 +83,6 @@ func (c *httpClient) getRequestBody(contentType string, body interface{}) ([]byt
 		return json.Marshal(body) // json is the default format for body
 	}
 
-}
-
-func (c *httpClient) getRequestHeaders(requestHeaders http.Header) http.Header {
-	result := make(http.Header)
-
-	// Add default headers to the request
-	for header, value := range c.builder.headers {
-		if len(value) > 0 {
-			result.Set(header, value[0])
-		}
-	}
-
-	// Add custom headers to the request
-	for header, value := range requestHeaders {
-		if len(value) > 0 {
-			result.Set(header, value[0])
-		}
-	}
-
-	return result
 }
 
 func (c *httpClient) do(method string, url string, headers http.Header, body interface{}) (*Response, error) {
