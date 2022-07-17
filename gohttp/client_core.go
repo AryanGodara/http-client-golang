@@ -9,6 +9,9 @@ import (
 	"net"
 	"net/http"
 	"time"
+
+	"github.com/AryanGodara/http-client-golang/core"
+	"github.com/AryanGodara/http-client-golang/gohttp_mock"
 )
 
 const (
@@ -85,7 +88,7 @@ func (c *httpClient) getRequestBody(contentType string, body interface{}) ([]byt
 
 }
 
-func (c *httpClient) do(method string, url string, headers http.Header, body interface{}) (*Response, error) {
+func (c *httpClient) do(method string, url string, headers http.Header, body interface{}) (*core.Response, error) {
 	fullHeaders := c.getRequestHeaders(headers)
 
 	requestBody, err := c.getRequestBody(fullHeaders.Get("Content-Type"), body)
@@ -94,7 +97,7 @@ func (c *httpClient) do(method string, url string, headers http.Header, body int
 	}
 
 	// we already have a mock matching this particular request type
-	if mock := mockupServer.getMock(method, url, string(requestBody)); mock != nil {
+	if mock := gohttp_mock.GetMock(method, url, string(requestBody)); mock != nil {
 		return mock.GetResponse()
 	}
 
@@ -120,11 +123,11 @@ func (c *httpClient) do(method string, url string, headers http.Header, body int
 
 	defer response.Body.Close() // So the user of this package doesn't have to do this :)
 
-	finalResponse := Response{
-		status:     response.Status,
-		statusCode: response.StatusCode,
-		headers:    response.Header,
-		body:       responseBody,
+	finalResponse := core.Response{
+		Status:     response.Status,
+		StatusCode: response.StatusCode,
+		Headers:    response.Header,
+		Body:       responseBody,
 	}
 
 	return &finalResponse, nil
