@@ -18,6 +18,7 @@ func getHttpClient() gohttp.Client {
 		SetConnectionTimeout(2 * time.Second).
 		SetResponseTimeout(3 * time.Second).
 		SetHttpClient(&currentClient).
+		SetUserAgent("Aryan-Computer").
 		Build()
 
 	return client

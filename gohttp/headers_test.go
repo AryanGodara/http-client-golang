@@ -36,7 +36,7 @@ func TestGetRequestHeaders(t *testing.T) {
 		t.Error("invalid content type received")
 	}
 
-	// if finalHeaders.Get("User-Agent") != "mocked-http-client" {
-	// 	t.Error("invalid user agent received")
-	// }
+	if finalHeaders.Get("User-Agent") != "mocked-http-client" {
+		t.Error("invalid user agent received")
+	}
 }

@@ -86,9 +86,8 @@ func (c *httpClient) getRequestBody(contentType string, body interface{}) ([]byt
 }
 
 func (c *httpClient) do(method string, url string, headers http.Header, body interface{}) (*Response, error) {
-	// client := http.Client{}
-
 	fullHeaders := c.getRequestHeaders(headers)
+
 	requestBody, err := c.getRequestBody(fullHeaders.Get("Content-Type"), body)
 	if err != nil {
 		panic(err)
@@ -106,8 +105,6 @@ func (c *httpClient) do(method string, url string, headers http.Header, body int
 	}
 
 	request.Header = fullHeaders
-
-	// return c.client.Do(request)	//? This'll fail, if we run this before creating a client
 
 	client := c.getHttpClient()
 

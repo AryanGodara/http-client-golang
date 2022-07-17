@@ -27,5 +27,14 @@ func (c *httpClient) getRequestHeaders(requestHeaders http.Header) http.Header {
 		}
 	}
 
+	// Set User-Agent if it is defined, and not initialized in headers yet
+	if c.builder.userAgent != "" {
+		if result.Get("User-Agent") != "" { // Header already exists
+			return result
+		}
+
+		result.Set("User-Agent", c.builder.userAgent)
+	}
+
 	return result
 }
