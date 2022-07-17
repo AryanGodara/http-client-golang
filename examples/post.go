@@ -13,7 +13,7 @@ type GithubError struct {
 
 type Repository struct {
 	Name        string `json:"name"`
-	Description string `json:"description"`
+	Description string `json:"description,omitempty"`
 	Private     bool   `json:"private"`
 }
 
@@ -26,7 +26,7 @@ func CreateRepo(request Repository) (*Repository, error) {
 	if response.StatusCode() != http.StatusCreated {
 		var githubError GithubError
 		if err := response.UnmarshalJson(&githubError); err != nil {
-			return nil, errors.New("error processing github error response when creating a new repository")
+			return nil, errors.New("error processing github error response when creating a new repo")
 		}
 
 		return nil, errors.New(githubError.Message)
