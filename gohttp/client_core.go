@@ -21,8 +21,8 @@ const (
 )
 
 func (c *httpClient) getHttpClient() core.HttpClient {
-	if gohttp_mock.IsMockServerEnabled() {
-		return gohttp_mock.GetMockedClient()
+	if gohttp_mock.MockupServer.IsEnabled() {
+		return gohttp_mock.MockupServer.GetMockedClient()
 	}
 
 	c.clientOnce.Do(func() { // func() is executed only once, even in concurrent enviornments
