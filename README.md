@@ -185,9 +185,3 @@ gohttp_mock.MockupServer.AddMock(gohttp_mock.Mock{
 ```
 
 In this case, we get a response with status code ``201 Created`` and that particular response body.
-
-## Collaboration
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as needed. Changes with no test cases will NOT be reviewed!
