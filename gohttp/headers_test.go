@@ -3,14 +3,16 @@ package gohttp
 import (
 	"net/http"
 	"testing"
+
+	"github.com/AryanGodara/http-client-golang/gomime"
 )
 
 func TestGetRequestHeaders(t *testing.T) {
 	// Initialization
 	client := httpClient{}
 	commonHeaders := make(http.Header)
-	commonHeaders.Set("Content-Type", "application/json")
-	commonHeaders.Set("User-Agent", "mocked-http-client")
+	commonHeaders.Set(gomime.HeaderContentType, gomime.ContentTypeJson)
+	commonHeaders.Set(gomime.HeaderUserAgent, "mocked-http-client")
 	client.builder = &clientBuilder{
 		headers: commonHeaders,
 
@@ -32,11 +34,11 @@ func TestGetRequestHeaders(t *testing.T) {
 		t.Error("invalid request id received")
 	}
 
-	if finalHeaders.Get("Content-Type") != "application/json" {
+	if finalHeaders.Get(gomime.HeaderContentType) != "application/json" {
 		t.Error("invalid content type received")
 	}
 
-	if finalHeaders.Get("User-Agent") != "mocked-http-client" {
+	if finalHeaders.Get(gomime.HeaderUserAgent) != "mocked-http-client" {
 		t.Error("invalid user agent received")
 	}
 }

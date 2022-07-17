@@ -2,6 +2,8 @@ package gohttp
 
 import (
 	"testing"
+
+	"github.com/AryanGodara/http-client-golang/gomime"
 )
 
 func TestGetRequestBody(t *testing.T) {
@@ -26,7 +28,7 @@ func TestGetRequestBody(t *testing.T) {
 		// Execution
 		requestBody := []string{"one", "two"}
 
-		body, err := client.getRequestBody("application/json", requestBody)
+		body, err := client.getRequestBody(gomime.ContentTypeJson, requestBody)
 
 		// Validation
 		if err != nil {
