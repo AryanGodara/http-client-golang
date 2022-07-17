@@ -44,8 +44,8 @@ func getUrls() {
 	}
 
 	//* Using our custom response
-	fmt.Println(response.Status())
-	fmt.Println(response.StatusCode())
+	fmt.Println(response.Status)
+	fmt.Println(response.StatusCode)
 
 	var user User
 	err = response.UnmarshalJson(&user)

@@ -3,9 +3,10 @@ package gohttp_mock
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"fmt"
 	"strings"
 	"sync"
+
+	"github.com/AryanGodara/http-client-golang/core"
 )
 
 var (
@@ -13,12 +14,15 @@ var (
 		mocks:       make(map[string]*Mock),
 		enabled:     false,
 		serverMutex: sync.Mutex{},
+		httpClient:  &httpClientMock{},
 	}
 )
 
 type mockServer struct {
 	enabled     bool
 	serverMutex sync.Mutex
+
+	httpClient core.HttpClient
 
 	mocks map[string]*Mock
 }
@@ -76,16 +80,10 @@ func (m *mockServer) cleanBody(body string) string {
 	return body
 }
 
-func GetMock(method, url, body string) *Mock {
-	if !mockupServer.enabled {
-		return nil
-	}
+func IsMockServerEnabled() bool {
+	return mockupServer.enabled
+}
 
-	if mock := mockupServer.mocks[mockupServer.getMockKey(method, url, body)]; mock != nil {
-		return mock
-	}
-
-	return &Mock{
-		Error: fmt.Errorf("no mock matching %s from '%s' with given body", method, url),
-	}
+func GetMockedClient() core.HttpClient {
+	return mockupServer.httpClient
 }

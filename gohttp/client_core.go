@@ -20,7 +20,10 @@ const (
 	defaultResponseTimeout   = 5 * time.Second
 )
 
-func (c *httpClient) getHttpClient() *http.Client {
+func (c *httpClient) getHttpClient() core.HttpClient {
+	if gohttp_mock.IsMockServerEnabled() {
+		return gohttp_mock.GetMockedClient()
+	}
 
 	c.clientOnce.Do(func() { // func() is executed only once, even in concurrent enviornments
 
@@ -96,11 +99,6 @@ func (c *httpClient) do(method string, url string, headers http.Header, body int
 		panic(err)
 	}
 
-	// we already have a mock matching this particular request type
-	if mock := gohttp_mock.GetMock(method, url, string(requestBody)); mock != nil {
-		return mock.GetResponse()
-	}
-
 	// create a new http request
 	request, err := http.NewRequest(method, url, bytes.NewBuffer(requestBody))
 	if err != nil {
@@ -109,9 +107,7 @@ func (c *httpClient) do(method string, url string, headers http.Header, body int
 
 	request.Header = fullHeaders
 
-	client := c.getHttpClient()
-
-	response, err := client.Do(request)
+	response, err := c.getHttpClient().Do(request)
 	if err != nil {
 		return nil, err
 	}
