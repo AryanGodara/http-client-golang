@@ -13,7 +13,7 @@ require github.com/federicoleon/go-httpclient
 In order to use the library for making HTTP calls you need to import the corresponding HTTP package:
 
 ```go
-import "github.com/federicoleon/go-httpclient/gohttp"
+import "github.com/aryangodara/http-client-golang/gohttp"
 ```
 
 ## Configuring the client
