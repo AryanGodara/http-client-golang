@@ -134,7 +134,7 @@ The library provides a convenient package for mocking requests and getting a par
 In order to use the mocking features you need to import the corresponding package:
 
 ```go
-import "github.com/federicoleon/go-httpclient/gohttp_mock"
+import "github.com/aryangodara/http-client-golang/gohttp_mock"
 ```
 
 ### Starting the mock server:
