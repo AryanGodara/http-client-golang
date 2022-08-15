@@ -6,7 +6,7 @@ A productive and lightweight HTTP client written in golang 1.18
 
 ```bash
 # Go Modules
-require github.com/federicoleon/go-httpclient
+require github.com/aryangodara/http-client-golang
 ```
 
 ## Usage
