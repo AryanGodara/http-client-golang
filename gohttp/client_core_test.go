@@ -39,12 +39,4 @@ func TestGetRequestBody(t *testing.T) {
 			t.Error("invalid json body obtained")
 		}
 	})
-
-	t.Run("BodyWithXml", func(t *testing.T) {
-
-	})
-
-	t.Run("BodyWithJsonAsDefault", func(t *testing.T) {
-
-	})
 }
