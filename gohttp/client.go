@@ -34,21 +34,46 @@ func (c *httpClient) Get(url string, headers ...http.Header) (*core.Response, er
 }
 
 func (c *httpClient) Post(url string, body interface{}, headers ...http.Header) (*core.Response, error) {
-	return c.do(http.MethodPost, url, getHeaders(headers...), body)
+	response, err := c.do(http.MethodPost, url, getHeaders(headers...), body)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, err
 }
 
 func (c *httpClient) Put(url string, body interface{}, headers ...http.Header) (*core.Response, error) {
-	return c.do(http.MethodPut, url, getHeaders(headers...), body)
+	response, err := c.do(http.MethodPut, url, getHeaders(headers...), body)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, err
 }
 
 func (c *httpClient) Patch(url string, headers ...http.Header) (*core.Response, error) {
-	return c.do(http.MethodPatch, url, getHeaders(headers...), nil)
+	response, err := c.do(http.MethodPatch, url, getHeaders(headers...), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, err
 }
 
 func (c *httpClient) Delete(url string, headers ...http.Header) (*core.Response, error) {
-	return c.do(http.MethodDelete, url, getHeaders(headers...), nil)
+	response, err := c.do(http.MethodDelete, url, getHeaders(headers...), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, err
 }
 
 func (c *httpClient) Options(url string, headers ...http.Header) (*core.Response, error) {
-	return c.do(http.MethodOptions, url, getHeaders(headers...), nil)
+	response, err := c.do(http.MethodOptions, url, getHeaders(headers...), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, err
 }
