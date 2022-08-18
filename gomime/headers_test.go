@@ -14,4 +14,12 @@ func TestHeaders(t *testing.T) {
 	if ContentTypeJson != "application/json" {
 		t.Error("invalid content type json header")
 	}
+
+	if ContentTypeXml != "application/xml" {
+		t.Error("invalid content type xml header")
+	}
+
+	if ContentTypeOctetStream != "application/octet-stream" {
+		t.Error("invalid content type octet-stream header")
+	}
 }
