@@ -7,6 +7,47 @@ import (
 	"github.com/AryanGodara/http-client-golang/gomime"
 )
 
+func TestGetHeaders(t *testing.T) {
+	t.Run("no headers", func(t *testing.T) {
+		ret_header := getHeaders()
+		if len(ret_header) != 0 {
+			t.Error("expected an empty http Header")
+		}
+	})
+
+	t.Run("one header", func(t *testing.T) {
+		header := make(http.Header)
+		header.Set("ABC", "XYZ")
+		ret_header := getHeaders(header)
+
+		if len(ret_header) == 0 {
+			t.Error("exptected to get a non nil http Header")
+		}
+		if ret_header.Get("ABC") != "XYZ" {
+			t.Error("mismathed key-value pair")
+		}
+	})
+
+	t.Run("multiple headers", func(t *testing.T) {
+		header := make(http.Header)
+		header.Set("ABC", "XYZ")
+
+		extra_header := make(http.Header)
+		extra_header.Set("RAN", "DOM")
+
+		ret_header := getHeaders(header, extra_header)
+		if len(ret_header) == 0 {
+			t.Error("exptected to get a non nil http Header")
+		}
+		if len(ret_header) > 1 {
+			t.Error("exptected to get only a single http Header")
+		}
+		if ret_header.Get("ABC") != "XYZ" {
+			t.Error("mismathed key-value pair")
+		}
+	})
+}
+
 func TestGetRequestHeaders(t *testing.T) {
 	// Initialization
 	client := httpClient{}
