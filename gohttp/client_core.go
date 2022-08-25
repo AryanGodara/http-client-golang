@@ -21,6 +21,9 @@ const (
 )
 
 func (c *httpClient) getHttpClient() core.HttpClient {
+	//! if mock_server is enabled, it means that we're testing. Not making actual calls
+	//! over the internet. So, instead of creating a new client, and returning that
+	//! We simply return the MockupServer.mockHttpClient, which has its own Do function
 	if gohttp_mock.MockupServer.IsEnabled() {
 		return gohttp_mock.MockupServer.GetMockedClient()
 	}
@@ -107,6 +110,8 @@ func (c *httpClient) do(method string, url string, headers http.Header, body int
 
 	request.Header = fullHeaders
 
+	//* When mock_server=ON, getHttpClient returns mockhttpclient, which has a custom
+	// Do function, which handles mock requests
 	response, err := c.getHttpClient().Do(request)
 	if err != nil {
 		return nil, err
