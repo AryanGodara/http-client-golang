@@ -15,7 +15,7 @@ func getGitHubClient() gohttp.Client {
 	client := gohttp.NewBuilder().
 		DisableTimeouts(false).
 		SetConnectionTimeout(2 * time.Second).
-		SetResponseTimeout(50 * time.Millisecond).
+		SetResponseTimeout(500 * time.Millisecond).
 		SetMaxIdleConnections(5). // all return gohttp.ClientBuilder
 		Build()                   // return gohttp.Client
 
