@@ -18,7 +18,7 @@ type Mock struct {
 	Error              error
 }
 
-// GetResponse returns a Response boject based on the mock configuration
+// GetResponse returns a Response object based on the mock configuration
 func (m *Mock) GetResponse() (*core.Response, error) {
 	if m.Error != nil {
 		return nil, m.Error
