@@ -2,13 +2,6 @@
 
 A productive and lightweight HTTP client written in golang 1.18
 
-## Installation
-
-```bash
-# Go Modules
-require github.com/aryangodara/http-client-golang
-```
-
 ## Usage
 In order to use the library for making HTTP calls you need to import the corresponding HTTP package:
 

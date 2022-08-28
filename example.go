@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/AryanGodara/http-client-golang/gohttp"
@@ -28,15 +29,16 @@ type User struct {
 }
 
 func main() {
-	getUrls()
-
-	// v := &User{FirstName: "John", LastName: "Doe"}
-	// xmlbody, _ := xml.Marshal(v)
-
-	// fmt.Println(string(xmlbody))
+	wg := &sync.WaitGroup{}
+	for i := 0; i < 100; i++ {
+		wg.Add(1)
+		go getUrls(wg)
+	}
+	wg.Wait()
 }
 
-func getUrls() {
+func getUrls(wg *sync.WaitGroup) {
+	defer wg.Done()
 
 	response, err := githubHttpClient.Get("https://api.github.com", nil)
 	if err != nil {
