@@ -9,9 +9,6 @@ import (
 
 type httpClientMock struct{}
 
-//? Called from gohttp/client_core.Go, this "Do" function, returns response according
-//? to the mock, if that mock is found, else it returns an error.
-//* So, it isn't making an actual call over the internet
 func (c *httpClientMock) Do(request *http.Request) (*http.Response, error) {
 	requestBody, err := request.GetBody()
 	if err != nil {
